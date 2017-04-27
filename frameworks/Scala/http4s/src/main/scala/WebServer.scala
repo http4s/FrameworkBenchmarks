@@ -27,15 +27,10 @@ case class World(id: Int, randomNumber: Int)
 case class Fortune(id: Int, message: String)
 
 object Middleware {
-  def addHeaders(service: HttpService): HttpService = {
-    Service.lift { req: Request =>
-      service.map { resp =>
-        resp.putHeaders(
-          Header("Server", req.serverAddr)
-        )
-      }.apply(req)
-    }
-  }
+  val ServerHeader = Header("Server", "http4s/blaze")
+
+  def addHeaders(service: HttpService): HttpService =
+    service.map(_.putHeaders(ServerHeader))
 }
 
 object Queries extends OptionalValidatingQueryParamDecoderMatcher[Int]("queries") {
