@@ -128,6 +128,9 @@ object WebServer extends TaskApp {
 
   // HTTP service definition
   def service(xa: Transactor[Task]) = HttpService {
+    case GET -> Root / "plaintext" =>
+      Ok("Hello, World!")
+
     case GET -> Root / "json" =>
       Ok(Json.obj("message" -> Json.fromString("Hello, World!")))
 
@@ -156,10 +159,6 @@ object WebServer extends TaskApp {
       } yield newWorlds
 
       Ok(updated)
-
-    case GET -> Root / "plaintext" =>
-      Ok("Hello, World!")
-        .withContentType(Some(`Content-Type`(MediaType.`text/plain`)))
   }
 
   // Given a fully constructed HttpService, start the server and wait for completion
